@@ -9,12 +9,13 @@ __pycache__/
 
 # Node / Vite
 node_modules/
-dist/
 dist-ssr/
 *.local
 .env
 .env.*
 !.env.example
+!frontend/dist/
+!frontend/dist/**
 
 # IDE
 .vscode/
