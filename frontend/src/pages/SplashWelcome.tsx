@@ -32,10 +32,10 @@ export const SplashWelcome: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full bg-[#E8F0E5] select-none flex flex-col justify-between overflow-x-hidden">
-      {/* 1. Atmospheric Pristine Background (Misty green hills, clouds, sunburst - NO baked-in text or static globe) */}
+    <div className="relative min-h-screen w-full bg-[#E8F0E5] select-none flex flex-col justify-between overflow-x-hidden m-0 p-0 border-none">
+      {/* 1. Atmospheric Pristine Background (Bleed -inset-1 eliminates any edge seam) */}
       <div
-        className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none"
+        className="absolute -inset-1 z-0 bg-cover bg-center bg-no-repeat pointer-events-none"
         style={{
           backgroundImage: 'url(/launch_bg_final.png)',
           backgroundSize: 'cover',

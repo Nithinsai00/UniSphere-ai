@@ -110,9 +110,50 @@ export const api = {
   },
   getFacultyStudentDetail: (id: number) => apiRequest(`/faculty/students/${id}`),
   getStudentRecommendations: (id: number) => apiRequest(`/faculty/students/${id}/recommendations`),
+  getFacultyMessages: () => apiRequest('/faculty/messages'),
+  sendFacultyMessage: (data: { student_id: number; subject: string; content: string; category?: string }) =>
+    apiRequest('/faculty/messages', { method: 'POST', body: JSON.stringify(data) }),
+  replyFacultyMessage: (id: number, content: string) =>
+    apiRequest(`/faculty/messages/${id}/reply`, { method: 'POST', body: JSON.stringify({ content }) }),
+  getFacultyAssignments: () => apiRequest('/faculty/assignments'),
+  createFacultyAssignment: (data: any) =>
+    apiRequest('/faculty/assignments', { method: 'POST', body: JSON.stringify(data) }),
+  updateFacultyAssignment: (id: number, data: any) =>
+    apiRequest(`/faculty/assignments/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteFacultyAssignment: (id: number) =>
+    apiRequest(`/faculty/assignments/${id}`, { method: 'DELETE' }),
+  assignImprovementTask: (data: any) =>
+    apiRequest('/faculty/tasks', { method: 'POST', body: JSON.stringify(data) }),
+  getFacultyTasks: () => apiRequest('/faculty/tasks'),
+  getFacultyPerformanceAnalytics: () => apiRequest('/faculty/performance-analytics'),
+  getFacultyStudyInsights: () => apiRequest('/faculty/study-insights'),
+  getFacultyStudyMaterials: () => apiRequest('/faculty/study-materials'),
+  uploadStudyMaterial: (formData: FormData) =>
+    apiRequest('/faculty/study-materials/upload', { method: 'POST', body: formData }),
+  togglePublishStudyMaterial: (id: number) =>
+    apiRequest(`/faculty/study-materials/${id}/publish`, { method: 'PUT' }),
+  deleteStudyMaterial: (id: number) =>
+    apiRequest(`/faculty/study-materials/${id}`, { method: 'DELETE' }),
 
   // Student
   getStudentDashboard: () => apiRequest('/student/me/dashboard'),
+  getStudentMessages: () => apiRequest('/student/me/messages'),
+  markStudentMessageRead: (id: number) =>
+    apiRequest(`/student/me/messages/${id}/read`, { method: 'PUT' }),
+  replyToStudentMessage: (id: number, content: string) =>
+    apiRequest(`/student/me/messages/${id}/reply`, {
+      method: 'POST',
+      body: JSON.stringify({ content }),
+    }),
+  getStudentAssignments: () => apiRequest('/student/me/assignments'),
+  getStudentTasks: () => apiRequest('/student/me/tasks'),
+  toggleStudentTask: (id: number) =>
+    apiRequest(`/student/me/tasks/${id}/toggle`, { method: 'PUT' }),
+  getStudentStudyMaterials: () => apiRequest('/student/me/study-materials'),
+
+  // Admin AI Insights & Reports
+  getAdminAIInsights: (department?: string) =>
+    apiRequest(`/admin/ai-insights${department ? `?department=${department}` : ''}`),
 
   // Analytics
   getAnalyticsOverview: (department?: string) =>
@@ -153,12 +194,28 @@ export const api = {
   getImportHistory: () => apiRequest('/data-import/history'),
 
   // Reports
-  getReportsSummary: (department?: string) =>
-    apiRequest(`/reports/summary${department ? `?department=${department}` : ''}`),
-  exportStudentsCSV: (department?: string, riskLevel?: string) => {
+  getReportsSummary: (params: Record<string, any> = {}) => {
     const q = new URLSearchParams();
-    if (department) q.append('department', department);
-    if (riskLevel) q.append('risk_level', riskLevel);
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '' && v !== 'all') q.append(k, String(v));
+    });
+    return apiRequest(`/reports/summary?${q.toString()}`);
+  },
+  generateReport: (data: {
+    report_type: string;
+    department?: string;
+    academic_year?: string;
+    risk_level?: string;
+    start_date?: string;
+    end_date?: string;
+  }) => apiRequest('/reports/generate', { method: 'POST', body: JSON.stringify(data) }),
+  getReportHistory: () => apiRequest('/reports/history'),
+  deleteReportHistory: (id: number) => apiRequest(`/reports/history/${id}`, { method: 'DELETE' }),
+  exportStudentsCSV: (params: Record<string, any> = {}) => {
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '' && v !== 'all') q.append(k, String(v));
+    });
     return apiRequest(`/reports/export/students-csv?${q.toString()}`);
   },
 

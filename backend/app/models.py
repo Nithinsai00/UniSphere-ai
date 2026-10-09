@@ -100,6 +100,7 @@ class Student(Base):
     # Relationships
     user = relationship("User", back_populates="student_profile")
     interventions = relationship("Intervention", back_populates="student", cascade="all, delete-orphan")
+    messages = relationship("StudentMessage", back_populates="student", cascade="all, delete-orphan")
 
 class Faculty(Base):
     __tablename__ = "faculty"
@@ -207,3 +208,103 @@ class DataImportJob(Base):
     warnings_count = Column(Integer, default=0)
     errors_json = Column(JSON, nullable=True, default=list)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class StudentMessage(Base):
+    __tablename__ = "student_messages"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(Integer, ForeignKey("students.id"), nullable=False, index=True)
+    sender_name = Column(String(150), nullable=False)
+    sender_designation = Column(String(100), nullable=True)
+    sender_department = Column(String(100), nullable=True)
+    sender_role = Column(String(50), nullable=True, default="faculty") # faculty, admin, placement, system
+    subject = Column(String(255), nullable=False)
+    preview = Column(String(255), nullable=True)
+    content = Column(Text, nullable=False)
+    category = Column(String(50), nullable=False, default="Academics") # Mentoring, Placement, Academics
+    is_read = Column(Boolean, default=False, nullable=False)
+    replies = Column(JSON, default=list, nullable=False) # list of reply objects
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+    
+    # Relationship
+    student = relationship("Student", back_populates="messages")
+
+class Assignment(Base):
+    __tablename__ = "assignments"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    faculty_id = Column(Integer, ForeignKey("faculty.id"), nullable=True)
+    faculty_name = Column(String(150), nullable=False, default="Prof. Priya Sharma")
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    subject = Column(String(150), nullable=False, default="Operating Systems")
+    target_class = Column(String(100), nullable=False, default="CSE - 3rd Year")
+    academic_year = Column(String(50), nullable=False, default="2025-2026")
+    semester = Column(Integer, nullable=False, default=6)
+    due_date = Column(String(100), nullable=False)
+    attachment_name = Column(String(255), nullable=True)
+    attachment_url = Column(String(500), nullable=True)
+    is_published = Column(Boolean, default=True, nullable=False)
+    submissions_count = Column(Integer, default=0)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class StudentImprovementTask(Base):
+    __tablename__ = "student_improvement_tasks"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(Integer, ForeignKey("students.id"), nullable=False, index=True)
+    faculty_id = Column(Integer, ForeignKey("faculty.id"), nullable=True)
+    faculty_name = Column(String(150), nullable=False, default="Prof. Priya Sharma")
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=False)
+    subject = Column(String(150), nullable=False, default="Operating Systems")
+    reason = Column(String(255), nullable=True)
+    due_date = Column(String(100), nullable=False)
+    status = Column(String(50), nullable=False, default="pending") # pending, completed
+    reference_doc = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    completed_at = Column(DateTime, nullable=True)
+
+class StudyMaterial(Base):
+    __tablename__ = "study_materials"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    faculty_id = Column(Integer, ForeignKey("faculty.id"), nullable=True)
+    faculty_name = Column(String(150), nullable=False, default="Prof. Priya Sharma")
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    subject = Column(String(150), nullable=False)
+    topic_unit = Column(String(150), nullable=True)
+    target_class = Column(String(100), nullable=False, default="CSE - 3rd Year")
+    department = Column(String(100), nullable=False, default="Computer Science")
+    academic_year = Column(String(50), nullable=False, default="2025-2026")
+    semester = Column(Integer, nullable=False, default=6)
+    filename = Column(String(255), nullable=False)
+    file_path = Column(String(500), nullable=False)
+    file_type = Column(String(50), nullable=False, default="PDF")
+    file_size_formatted = Column(String(50), nullable=False, default="2.4 MB")
+    file_size_bytes = Column(Integer, default=0)
+    is_published = Column(Boolean, default=True, nullable=False)
+    download_count = Column(Integer, default=0)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class GeneratedReport(Base):
+    __tablename__ = "generated_reports"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    report_name = Column(String(255), nullable=False) # e.g. "At-Risk Students Report"
+    report_type = Column(String(100), nullable=False) # e.g. "at_risk", "success_score", "attendance", ...
+    category = Column(String(100), nullable=False) # e.g. "Risk Analysis", "Academic", "Attendance", "Placement", "Institutional"
+    department = Column(String(100), nullable=True, default="all")
+    academic_year = Column(String(50), nullable=True, default="all")
+    risk_level = Column(String(50), nullable=True, default="all")
+    date_range = Column(String(100), nullable=True, default="Current Semester")
+    filters_applied = Column(JSON, default=dict)
+    summary_metrics = Column(JSON, default=dict)
+    status = Column(String(50), default="Ready")
+    file_format = Column(String(20), default="CSV")
+    generated_by = Column(String(150), default="Administrator")
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+

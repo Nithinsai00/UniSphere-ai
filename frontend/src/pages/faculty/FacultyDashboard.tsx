@@ -84,31 +84,41 @@ export const FacultyDashboard: React.FC = () => {
         {/* Card 1: Total Students */}
         <div className="uni-card p-4 sm:p-5 flex flex-col justify-between">
           <span className="text-xs font-semibold text-[#52665A]">Total Students</span>
-          <div className="text-3xl font-extrabold text-[#0A2818] mt-2">60</div>
+          <div className="text-3xl font-extrabold text-[#0A2818] mt-2">
+            {data?.total_students ?? 60}
+          </div>
         </div>
 
         {/* Card 2: Average Marks */}
         <div className="uni-card p-4 sm:p-5 flex flex-col justify-between">
           <span className="text-xs font-semibold text-[#52665A]">Average Marks</span>
-          <div className="text-3xl font-extrabold text-[#0A2818] mt-2">78%</div>
+          <div className="text-3xl font-extrabold text-[#0A2818] mt-2">
+            {data?.average_marks ?? 78}%
+          </div>
         </div>
 
         {/* Card 3: Average Attendance */}
         <div className="uni-card p-4 sm:p-5 flex flex-col justify-between">
           <span className="text-xs font-semibold text-[#52665A]">Average Attendance</span>
-          <div className="text-3xl font-extrabold text-[#0A2818] mt-2">82%</div>
+          <div className="text-3xl font-extrabold text-[#0A2818] mt-2">
+            {data?.average_attendance ?? 82}%
+          </div>
         </div>
 
         {/* Card 4: Class Avg CGPA */}
         <div className="uni-card p-4 sm:p-5 flex flex-col justify-between">
           <span className="text-xs font-semibold text-[#52665A]">Class Avg CGPA</span>
-          <div className="text-3xl font-extrabold text-[#0A2818] mt-2">7.9</div>
+          <div className="text-3xl font-extrabold text-[#0A2818] mt-2">
+            {data?.class_avg_cgpa ?? 7.9}
+          </div>
         </div>
 
         {/* Card 5: At Risk Students (Red Title & Red Number) */}
         <div className="uni-card p-4 sm:p-5 flex flex-col justify-between border-red-200">
           <span className="text-xs font-bold text-[#DC2626]">At Risk Students</span>
-          <div className="text-3xl font-extrabold text-[#DC2626] mt-2">8</div>
+          <div className="text-3xl font-extrabold text-[#DC2626] mt-2">
+            {data?.at_risk_count ?? 8}
+          </div>
         </div>
       </div>
 
@@ -126,10 +136,10 @@ export const FacultyDashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#EAEFEA] text-[#0A2818]">
-              {atRiskStudents.map((row) => (
+              {(data?.at_risk_students && data.at_risk_students.length > 0 ? data.at_risk_students : atRiskStudents).map((row: any) => (
                 <tr
-                  key={row.id}
-                  onClick={() => navigate(`/faculty/students/${row.id}`)}
+                  key={row.id || row.student_id}
+                  onClick={() => navigate(`/faculty/students/${row.id || row.student_id}`)}
                   className="hover:bg-emerald-50/40 transition-colors cursor-pointer"
                 >
                   <td className="py-3.5 px-4 font-bold text-[#0A2818]">{row.name}</td>

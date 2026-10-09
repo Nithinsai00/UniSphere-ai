@@ -28,6 +28,11 @@ import { AdminAIInsights } from './pages/admin/AdminAIInsights';
 import { FacultyDashboard } from './pages/faculty/FacultyDashboard';
 import { FacultyStudents } from './pages/faculty/FacultyStudents';
 import { FacultyStudentDetail } from './pages/faculty/FacultyStudentDetail';
+import { FacultyAssignments } from './pages/faculty/FacultyAssignments';
+import { FacultyInbox } from './pages/faculty/FacultyInbox';
+import { FacultyPerformanceAnalytics } from './pages/faculty/FacultyPerformanceAnalytics';
+import { FacultyAIStudyInsights } from './pages/faculty/FacultyAIStudyInsights';
+import { FacultyStudyMaterials } from './pages/faculty/FacultyStudyMaterials';
 import { FacultyInterventions } from './pages/faculty/FacultyInterventions';
 import { FacultyReports } from './pages/faculty/FacultyReports';
 
@@ -37,6 +42,7 @@ import { StudentProfile } from './pages/student/StudentProfile';
 import { StudentAcademics } from './pages/student/StudentAcademics';
 import { StudentAttendance } from './pages/student/StudentAttendance';
 import { StudentPlacement } from './pages/student/StudentPlacement';
+import { StudentStudyMaterials } from './pages/student/StudentStudyMaterials';
 import { StudentRecommendations } from './pages/student/StudentRecommendations';
 import { StudentInbox } from './pages/student/StudentInbox';
 import { StudentFeedback } from './pages/student/StudentFeedback';
@@ -51,7 +57,7 @@ const ProtectedRoute: React.FC<{
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#F3F7FF] flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -114,6 +120,11 @@ export const App: React.FC = () => {
             <Route path="dashboard" element={<FacultyDashboard />} />
             <Route path="students" element={<FacultyStudents />} />
             <Route path="students/:id" element={<FacultyStudentDetail />} />
+            <Route path="assignments" element={<FacultyAssignments />} />
+            <Route path="inbox" element={<FacultyInbox />} />
+            <Route path="analytics" element={<FacultyPerformanceAnalytics />} />
+            <Route path="study-insights" element={<FacultyAIStudyInsights />} />
+            <Route path="study-materials" element={<FacultyStudyMaterials />} />
             <Route path="interventions" element={<FacultyInterventions />} />
             <Route path="reports" element={<FacultyReports />} />
           </Route>
@@ -133,6 +144,7 @@ export const App: React.FC = () => {
             <Route path="academics" element={<StudentAcademics />} />
             <Route path="attendance" element={<StudentAttendance />} />
             <Route path="placement" element={<StudentPlacement />} />
+            <Route path="study-materials" element={<StudentStudyMaterials />} />
             <Route path="recommendations" element={<StudentRecommendations />} />
             <Route path="inbox" element={<StudentInbox />} />
             <Route path="feedback" element={<StudentFeedback />} />

@@ -141,33 +141,35 @@ export const Login: React.FC = () => {
             {/* Role 1 Label & Icon: Student (Top) */}
             <div
               onClick={() => setActiveRole('student')}
-              className={`absolute top-4 sm:top-5 flex flex-col items-center cursor-pointer transition-all ${
-                activeRole === 'student' ? 'scale-105 font-bold text-[#0A3B24]' : 'text-[#2D4F3C]'
+              className={`absolute top-4 sm:top-5 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer transition-all select-none ${
+                activeRole === 'student' ? 'scale-105 font-bold text-[#0A3B24]' : 'text-[#2D4F3C] font-medium'
               }`}
             >
               <GraduationCap className="w-6 h-6 stroke-[2.2]" />
               <span className="text-xs mt-0.5">Student</span>
             </div>
 
-            {/* Role 2 Label & Icon: Faculty (Bottom Left) */}
+            {/* Role 2 Label & Icon: Faculty (Middle-Left) */}
             <div
               onClick={() => setActiveRole('faculty')}
-              className={`absolute bottom-8 left-6 sm:bottom-9 sm:left-7 flex flex-col items-center cursor-pointer transition-all ${
-                activeRole === 'faculty' ? 'scale-105 font-bold text-[#0A3B24]' : 'text-[#2D4F3C]'
+              style={{ left: '19%', top: '56%' }}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer transition-all select-none ${
+                activeRole === 'faculty' ? 'scale-105 font-bold text-[#0A3B24]' : 'text-[#2D4F3C] font-medium'
               }`}
             >
-              <Users className="w-5 h-5 stroke-[2.2]" />
+              <Users className="w-6 h-6 stroke-[2.2]" />
               <span className="text-xs mt-0.5">Faculty</span>
             </div>
 
-            {/* Role 3 Label & Icon: Admin (Bottom Right) */}
+            {/* Role 3 Label & Icon: Admin (Middle-Right) */}
             <div
               onClick={() => setActiveRole('admin')}
-              className={`absolute bottom-8 right-6 sm:bottom-9 sm:right-7 flex flex-col items-center cursor-pointer transition-all ${
-                activeRole === 'admin' ? 'scale-105 font-bold text-[#0A3B24]' : 'text-[#2D4F3C]'
+              style={{ left: '81%', top: '56%' }}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer transition-all select-none ${
+                activeRole === 'admin' ? 'scale-105 font-bold text-[#0A3B24]' : 'text-[#2D4F3C] font-medium'
               }`}
             >
-              <Settings className="w-5 h-5 stroke-[2.2]" />
+              <Settings className="w-6 h-6 stroke-[2.2]" />
               <span className="text-xs mt-0.5">Admin</span>
             </div>
 

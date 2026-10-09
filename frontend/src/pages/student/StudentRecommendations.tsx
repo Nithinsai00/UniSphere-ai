@@ -5,7 +5,6 @@ import {
   Calendar,
   GraduationCap,
   TrendingUp,
-  ChevronRight,
 } from 'lucide-react';
 
 export const StudentRecommendations: React.FC = () => {
@@ -88,14 +87,13 @@ export const StudentRecommendations: React.FC = () => {
                 </div>
               </div>
 
-              {/* Right: Badge + Chevron */}
-              <div className="flex items-center gap-3 shrink-0">
+              {/* Right: Badge */}
+              <div className="flex items-center shrink-0">
                 <span
                   className={`text-xs font-semibold px-3 py-1 rounded-full ${rec.badgeColor}`}
                 >
                   {rec.badge}
                 </span>
-                <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-emerald-700 transition-colors" />
               </div>
             </div>
           );
