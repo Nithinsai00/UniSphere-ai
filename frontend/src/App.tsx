@@ -22,6 +22,7 @@ import { AdminSegments } from './pages/admin/AdminSegments';
 import { AdminInterventions } from './pages/admin/AdminInterventions';
 import { AdminReports } from './pages/admin/AdminReports';
 import { AdminSettings } from './pages/admin/AdminSettings';
+import { AdminAIInsights } from './pages/admin/AdminAIInsights';
 
 // Faculty Pages
 import { FacultyDashboard } from './pages/faculty/FacultyDashboard';
@@ -37,6 +38,8 @@ import { StudentAcademics } from './pages/student/StudentAcademics';
 import { StudentAttendance } from './pages/student/StudentAttendance';
 import { StudentPlacement } from './pages/student/StudentPlacement';
 import { StudentRecommendations } from './pages/student/StudentRecommendations';
+import { StudentInbox } from './pages/student/StudentInbox';
+import { StudentFeedback } from './pages/student/StudentFeedback';
 
 // Protected Route Guard
 const ProtectedRoute: React.FC<{
@@ -93,6 +96,7 @@ export const App: React.FC = () => {
             <Route path="data-integration" element={<AdminDataIntegration />} />
             <Route path="segments" element={<AdminSegments />} />
             <Route path="interventions" element={<AdminInterventions />} />
+            <Route path="ai-insights" element={<AdminAIInsights />} />
             <Route path="reports" element={<AdminReports />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
@@ -130,6 +134,8 @@ export const App: React.FC = () => {
             <Route path="attendance" element={<StudentAttendance />} />
             <Route path="placement" element={<StudentPlacement />} />
             <Route path="recommendations" element={<StudentRecommendations />} />
+            <Route path="inbox" element={<StudentInbox />} />
+            <Route path="feedback" element={<StudentFeedback />} />
           </Route>
 
           {/* Fallback */}

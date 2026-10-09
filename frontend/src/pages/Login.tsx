@@ -3,12 +3,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Logo } from '../components/common/Logo';
 import {
-  GraduationCap,
-  Users,
-  ShieldCheck,
+  User,
+  Lock,
   Eye,
   EyeOff,
-  LogIn,
+  GraduationCap,
+  Users,
+  Settings,
   AlertCircle,
   Sparkles,
 } from 'lucide-react';
@@ -18,7 +19,7 @@ export const Login: React.FC = () => {
   const [searchParams] = useSearchParams();
   const { login } = useAuth();
 
-  const initialRole = (searchParams.get('role') as 'student' | 'faculty' | 'admin') || 'admin';
+  const initialRole = (searchParams.get('role') as 'student' | 'faculty' | 'admin') || 'student';
   const [activeRole, setActiveRole] = useState<'student' | 'faculty' | 'admin'>(initialRole);
 
   const [identifier, setIdentifier] = useState('');
@@ -27,7 +28,6 @@ export const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Sync role from query params if clicked from welcome
   useEffect(() => {
     const r = searchParams.get('role') as 'student' | 'faculty' | 'admin';
     if (r && ['student', 'faculty', 'admin'].includes(r)) {
@@ -36,7 +36,7 @@ export const Login: React.FC = () => {
   }, [searchParams]);
 
   // Demo auto-fill helpers
-  const fillDemoCredentials = (role: 'student' | 'faculty' | 'admin') => {
+  const fillDemo = (role: 'student' | 'faculty' | 'admin') => {
     setActiveRole(role);
     setError(null);
     if (role === 'admin') {
@@ -56,14 +56,13 @@ export const Login: React.FC = () => {
     setError(null);
 
     if (!identifier.trim() || !password.trim()) {
-      setError('Please provide both your ID / username and password.');
+      setError('Please enter your ID and password.');
       return;
     }
 
     setLoading(true);
     try {
       const user = await login(identifier, password, activeRole);
-      // Route based on role
       if (user.role === 'admin') {
         navigate('/admin/dashboard');
       } else if (user.role === 'faculty') {
@@ -72,95 +71,138 @@ export const Login: React.FC = () => {
         navigate('/student/dashboard');
       }
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please check credentials.');
+      setError(err.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F3F7FF] flex flex-col justify-center items-center p-4">
-      <div className="w-full max-w-md">
-        {/* Brand Header */}
-        <div className="flex flex-col items-center text-center mb-6">
-          <Logo size="lg" />
-          <p className="text-xs text-slate-500 mt-2 font-medium">
-            Sign in to access your role-specific intelligence portal
-          </p>
+    <div className="min-h-screen bg-[#EDF5EE] uni-sage-bg flex flex-col justify-between p-4 sm:p-8 select-none">
+      {/* Top Header matching 02_login_page.png */}
+      <header className="flex items-center justify-between w-full max-w-5xl mx-auto py-2">
+        <Logo size="md" />
+        <div className="text-sm font-semibold text-[#143B27] tracking-wide">
+          Smart Campus Analytics
+        </div>
+      </header>
+
+      {/* Main Split Content: Left Wheel + Right Login Card */}
+      <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-16 py-6">
+        {/* Left Side: Interactive Role Selector Wheel matching 02_login_page.png */}
+        <div className="flex flex-col items-center">
+          <div className="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center">
+            {/* Outer Ring Circle */}
+            <div className="absolute inset-0 rounded-full border-4 border-white/80 shadow-md bg-[#E4EFE3]/60 backdrop-blur-xs" />
+
+            {/* SVG Interactive Wheel */}
+            <svg
+              className="absolute inset-0 w-full h-full transform -rotate-90 cursor-pointer"
+              viewBox="0 0 200 200"
+            >
+              <defs>
+                <linearGradient id="activeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#5EEAD4" />
+                  <stop offset="100%" stopColor="#34D399" />
+                </linearGradient>
+              </defs>
+
+              {/* Segment 1: Student (Top / centered around 90 deg in standard cartesian) */}
+              <path
+                d="M 100 10 A 90 90 0 0 1 177.94 145 L 143.3 125 A 50 50 0 0 0 100 50 Z"
+                fill={activeRole === 'student' ? 'url(#activeGrad)' : '#E9F2E7'}
+                stroke="#FFFFFF"
+                strokeWidth="3"
+                className="transition-all duration-200 hover:opacity-90"
+                onClick={() => setActiveRole('student')}
+              />
+
+              {/* Segment 2: Admin (Bottom-Right) */}
+              <path
+                d="M 177.94 145 A 90 90 0 0 1 22.06 145 L 56.7 125 A 50 50 0 0 0 143.3 125 Z"
+                fill={activeRole === 'admin' ? 'url(#activeGrad)' : '#E9F2E7'}
+                stroke="#FFFFFF"
+                strokeWidth="3"
+                className="transition-all duration-200 hover:opacity-90"
+                onClick={() => setActiveRole('admin')}
+              />
+
+              {/* Segment 3: Faculty (Bottom-Left) */}
+              <path
+                d="M 22.06 145 A 90 90 0 0 1 100 10 L 100 50 A 50 50 0 0 0 56.7 125 Z"
+                fill={activeRole === 'faculty' ? 'url(#activeGrad)' : '#E9F2E7'}
+                stroke="#FFFFFF"
+                strokeWidth="3"
+                className="transition-all duration-200 hover:opacity-90"
+                onClick={() => setActiveRole('faculty')}
+              />
+            </svg>
+
+            {/* Role 1 Label & Icon: Student (Top) */}
+            <div
+              onClick={() => setActiveRole('student')}
+              className={`absolute top-4 sm:top-5 flex flex-col items-center cursor-pointer transition-all ${
+                activeRole === 'student' ? 'scale-105 font-bold text-[#0A3B24]' : 'text-[#2D4F3C]'
+              }`}
+            >
+              <GraduationCap className="w-6 h-6 stroke-[2.2]" />
+              <span className="text-xs mt-0.5">Student</span>
+            </div>
+
+            {/* Role 2 Label & Icon: Faculty (Bottom Left) */}
+            <div
+              onClick={() => setActiveRole('faculty')}
+              className={`absolute bottom-8 left-6 sm:bottom-9 sm:left-7 flex flex-col items-center cursor-pointer transition-all ${
+                activeRole === 'faculty' ? 'scale-105 font-bold text-[#0A3B24]' : 'text-[#2D4F3C]'
+              }`}
+            >
+              <Users className="w-5 h-5 stroke-[2.2]" />
+              <span className="text-xs mt-0.5">Faculty</span>
+            </div>
+
+            {/* Role 3 Label & Icon: Admin (Bottom Right) */}
+            <div
+              onClick={() => setActiveRole('admin')}
+              className={`absolute bottom-8 right-6 sm:bottom-9 sm:right-7 flex flex-col items-center cursor-pointer transition-all ${
+                activeRole === 'admin' ? 'scale-105 font-bold text-[#0A3B24]' : 'text-[#2D4F3C]'
+              }`}
+            >
+              <Settings className="w-5 h-5 stroke-[2.2]" />
+              <span className="text-xs mt-0.5">Admin</span>
+            </div>
+
+            {/* Center Disc matching 02_login_page.png */}
+            <div className="z-10 w-24 h-24 rounded-full bg-white shadow-sm border border-[#E2ECE2] flex flex-col items-center justify-center text-center select-none pointer-events-none">
+              <User className="w-6 h-6 text-[#0A4A2B] stroke-[2.2]" />
+              <div className="text-[11px] font-bold text-[#0A3B24] leading-tight mt-1">
+                Select
+                <br />
+                Your Role
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Card Container */}
-        <div className="uni-card bg-white p-6 sm:p-8 shadow-xl">
-          {/* Role Tabs */}
-          <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl mb-6 border border-slate-200">
-            <button
-              type="button"
-              onClick={() => {
-                setActiveRole('student');
-                setError(null);
-              }}
-              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all ${
-                activeRole === 'student'
-                  ? 'bg-white text-orange-600 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <GraduationCap className="w-4 h-4" />
-              <span>Student</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setActiveRole('faculty');
-                setError(null);
-              }}
-              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all ${
-                activeRole === 'faculty'
-                  ? 'bg-white text-[#245BB5] shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              <span>Faculty</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setActiveRole('admin');
-                setError(null);
-              }}
-              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all ${
-                activeRole === 'admin'
-                  ? 'bg-white text-[#102B57] shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <ShieldCheck className="w-4 h-4" />
-              <span>Admin</span>
-            </button>
-          </div>
-
-          {/* Quick Demo Credentials Autofill Banner */}
-          <div className="mb-5 p-2.5 rounded-lg bg-blue-50/60 border border-blue-100 flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs text-blue-900 font-medium">
-              <Sparkles className="w-3.5 h-3.5 text-orange-500" />
-              <span>Demo Quick Fill:</span>
+        {/* Right Side: Login Card matching 02_login_page.png */}
+        <div className="w-full max-w-sm bg-white rounded-3xl p-7 sm:p-8 shadow-md border border-[#E2ECE2]">
+          {/* Header */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-9 h-9 rounded-full bg-[#E5EFE6] flex items-center justify-center text-[#0A4A2B]">
+              <User className="w-5 h-5 stroke-[2.2]" />
             </div>
-            <button
-              type="button"
-              onClick={() => fillDemoCredentials(activeRole)}
-              className="text-xs font-bold text-blue-700 hover:text-blue-900 bg-white px-2 py-0.5 rounded shadow-2xs border border-blue-200 hover:bg-blue-50 transition-colors"
-            >
-              Autofill {activeRole.toUpperCase()}
-            </button>
+            <h2 className="text-xl font-bold text-[#0A2818]">
+              {activeRole === 'student'
+                ? 'Student Login'
+                : activeRole === 'faculty'
+                ? 'Faculty Login'
+                : 'Admin Login'}
+            </h2>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+            <div className="mb-4 p-2.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
               <span>{error}</span>
             </div>
           )}
@@ -168,97 +210,100 @@ export const Login: React.FC = () => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-[#10213A] uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-[#0A2818] mb-1.5">
                 {activeRole === 'student'
-                  ? 'Student ID or Registered Phone'
+                  ? 'Student ID'
                   : activeRole === 'faculty'
-                  ? 'Faculty ID or Registered Phone'
-                  : 'Admin Username or Email'}
+                  ? 'Faculty ID'
+                  : 'Admin ID'}
               </label>
-              <input
-                type="text"
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                placeholder={
-                  activeRole === 'student'
-                    ? 'e.g. STU1001 or registered phone'
-                    : activeRole === 'faculty'
-                    ? 'e.g. FAC001 or registered phone'
-                    : 'e.g. admin or admin@unisphere.edu'
-                }
-                className="w-full text-sm px-3.5 py-2.5 bg-slate-50 border border-[#DCE5F3] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-800"
-                required
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <User className="w-4 h-4" />
+                </div>
+                <input
+                  type="text"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  placeholder="Enter your ID"
+                  className="w-full pl-10 pr-3.5 py-2.5 bg-white border border-[#D5E2D7] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-slate-800"
+                  required
+                />
+              </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-semibold text-[#10213A] uppercase tracking-wider">
-                  Password
-                </label>
-                <span className="text-[11px] text-slate-400">
-                  {activeRole === 'admin' ? 'Initial prototype: Hope@50' : 'Default: ' + activeRole.charAt(0).toUpperCase() + activeRole.slice(1) + '@2026'}
-                </span>
-              </div>
+              <label className="block text-xs font-semibold text-[#0A2818] mb-1.5">
+                Password
+              </label>
               <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <Lock className="w-4 h-4" />
+                </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full text-sm px-3.5 py-2.5 bg-slate-50 border border-[#DCE5F3] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-800 pr-10"
+                  className="w-full pl-10 pr-10 py-2.5 bg-white border border-[#D5E2D7] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-slate-800"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
+            {/* Forgot Password Link matching 02_login_page.png */}
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={() => alert(`Password reset request submitted for ${activeRole}. An administrator has been notified.`)}
+                className="text-xs text-[#059669] hover:underline font-semibold cursor-pointer"
+              >
+                Forgot Password?
+              </button>
+            </div>
+
+            {/* Login Button matching 02_login_page.png */}
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 rounded-lg font-bold text-sm text-white shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                activeRole === 'student'
-                  ? 'bg-[#F58B35] hover:bg-orange-600'
-                  : activeRole === 'faculty'
-                  ? 'bg-[#245BB5] hover:bg-blue-700'
-                  : 'bg-[#102B57] hover:bg-blue-950'
-              }`}
+              className="w-full py-3 rounded-xl font-bold text-sm text-white bg-[#0A4D2F] hover:bg-[#073D24] shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
-                <>
-                  <LogIn className="w-4 h-4" />
-                  <span>Sign In as {activeRole.charAt(0).toUpperCase() + activeRole.slice(1)}</span>
-                </>
+                <span>Login</span>
               )}
             </button>
           </form>
 
-          {/* Footer note */}
-          <div className="mt-6 pt-4 border-t border-slate-100 text-center">
-            <p className="text-xs text-slate-500">
-              Need account assistance? Contact your institutional administrator.
-            </p>
+          {/* Quick Demo Credentials Autofill Banner */}
+          <div className="mt-5 pt-4 border-t border-[#E8F0EA] flex items-center justify-between text-xs">
+            <span className="text-slate-500 text-[11px] font-medium flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-emerald-600" />
+              Demo:
+            </span>
+            <button
+              type="button"
+              onClick={() => fillDemo(activeRole)}
+              className="text-[11px] font-bold text-[#0A4D2F] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+            >
+              Fill Demo Credentials
+            </button>
           </div>
         </div>
-
-        {/* Back to Home */}
-        <div className="text-center mt-4">
-          <button
-            onClick={() => navigate('/')}
-            className="text-xs text-slate-500 hover:text-slate-800 font-medium cursor-pointer"
-          >
-            ← Back to UniSphere Welcome
-          </button>
-        </div>
       </div>
+
+      {/* Footer */}
+      <footer className="text-center text-[11px] text-[#29563E]/70 py-2">
+        UniSphere AI • Student Success Intelligence Platform
+      </footer>
     </div>
   );
 };

@@ -56,16 +56,16 @@ export const AdminAnalytics: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-[#10213A] tracking-tight">
+          <h1 className="text-2xl font-extrabold text-[#082F1B] tracking-tight">
             Student Success Analytics
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-[#52665A] mt-0.5">
             Deep multi-dimensional analysis comparing academic achievement, coding competence, and
             placement readiness across departments.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-[#DCE5F3] shadow-2xs">
+        <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-[#E2ECE2] shadow-2xs">
           <Filter className="w-3.5 h-3.5 text-slate-400" />
           <select
             value={selectedDept}
@@ -84,16 +84,16 @@ export const AdminAnalytics: React.FC = () => {
 
       {/* Placement Readiness Breakdown Across Departments */}
       <div className="uni-card p-5">
-        <h3 className="text-sm font-bold text-[#10213A] mb-1">
+        <h3 className="text-sm font-bold text-[#082F1B] mb-1">
           Placement Competency Components by Department
         </h3>
-        <p className="text-xs text-slate-500 mb-4">
+        <p className="text-xs text-[#52665A] mb-4">
           Breakdown across coding assessments, quantitative aptitude, and mock interviews (0-100)
         </p>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={placementData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5EFE6" />
               <XAxis dataKey="department" tick={{ fontSize: 10 }} />
               <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
               <Tooltip
@@ -105,16 +105,16 @@ export const AdminAnalytics: React.FC = () => {
                 }}
               />
               <Legend wrapperStyle={{ fontSize: '11px' }} />
-              <Bar dataKey="avg_coding" fill="#245BB5" name="Coding (DSA)" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="avg_coding" fill="#0B4A2B" name="Coding (DSA)" radius={[3, 3, 0, 0]} />
               <Bar
                 dataKey="avg_aptitude"
-                fill="#F58B35"
+                fill="#F59E0B"
                 name="Aptitude & Quant"
                 radius={[3, 3, 0, 0]}
               />
               <Bar
                 dataKey="avg_interview"
-                fill="#3B82F6"
+                fill="#10B981"
                 name="Mock Interview"
                 radius={[3, 3, 0, 0]}
               />

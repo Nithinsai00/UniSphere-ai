@@ -78,19 +78,19 @@ export const AskUniSphereDrawer: React.FC<AskUniSphereDrawerProps> = ({
       {/* Drawer */}
       <div className="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col z-10 border-l border-slate-200">
         {/* Header */}
-        <div className="p-4 bg-[#102B57] text-white flex items-center justify-between shadow-sm">
+        <div className="p-4 bg-[#0B4527] text-white flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center border border-white/20">
-              <Bot className="w-5 h-5 text-orange-400" />
+              <Bot className="w-5 h-5 text-emerald-300" />
             </div>
             <div>
               <div className="flex items-center gap-1.5 font-bold text-sm">
                 <span>Ask UniSphere</span>
-                <span className="text-[10px] bg-orange-500 text-white px-1.5 py-0.2 rounded font-extrabold uppercase">
+                <span className="text-[10px] bg-emerald-500 text-white px-1.5 py-0.2 rounded font-extrabold uppercase">
                   AI
                 </span>
               </div>
-              <p className="text-xs text-blue-200">Safe, Role-Aware Campus Intelligence</p>
+              <p className="text-xs text-emerald-100">Safe, Role-Aware Campus Intelligence</p>
             </div>
           </div>
           <button
@@ -113,7 +113,7 @@ export const AskUniSphereDrawer: React.FC<AskUniSphereDrawerProps> = ({
               <div
                 className={`max-w-[90%] p-3.5 rounded-xl text-sm leading-relaxed shadow-xs ${
                   m.sender === 'user'
-                    ? 'bg-[#245BB5] text-white rounded-br-none'
+                    ? 'bg-[#0B4A2B] text-white rounded-br-none'
                     : 'bg-white border border-slate-200 text-[#10213A] rounded-bl-none'
                 }`}
               >
