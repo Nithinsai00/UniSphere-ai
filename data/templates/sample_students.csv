@@ -1,0 +1,6 @@
+student_id,full_name,email,phone_number,department,current_year,semester,degree
+STU2001,Karan Kapoor,karan.kapoor@unisphere.edu,+91 98765 00001,Computer Science & Engineering,3,6,B.Tech
+STU2002,Meera Nambiar,meera.n@unisphere.edu,+91 98765 00002,Information Technology,3,6,B.Tech
+STU2003,Devendra Pillai,dev.pillai@unisphere.edu,+91 98765 00003,Electronics & Communication Engineering,4,7,B.Tech
+STU2004,Tanvi Agarwal,tanvi.a@unisphere.edu,+91 98765 00004,Data Science & Artificial Intelligence,2,4,B.Tech
+STU2005,Gautam Verma,gautam.v@unisphere.edu,+91 98765 00005,Mechanical Engineering,3,5,B.Tech
