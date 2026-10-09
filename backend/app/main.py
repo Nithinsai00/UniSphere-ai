@@ -94,7 +94,7 @@ if os.path.exists(photos_dir):
     app.mount("/photos", StaticFiles(directory=photos_dir), name="photos")
 
 # Catch-all Route for Frontend Single Page Application (SPA)
-@app.get("/{full_path:path}")
+@app.api_route("/{full_path:path}", methods=["GET", "HEAD"])
 async def serve_spa(full_path: str):
     # 1. Ignore /api, /docs, /openapi.json which are handled by FastAPI
     if full_path.startswith("api/") or full_path in ("docs", "openapi.json", "redoc"):
